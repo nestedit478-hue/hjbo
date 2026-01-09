@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Portfolio Manager</title>
+    <link rel="stylesheet" href="../style.css">
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Admin Sidebar -->
+        <div class="admin-sidebar">
+            <div class="admin-logo">
+                <h2><i class="fas fa-cogs"></i> Portfolio Admin</h2>
+            </div>
+            <ul class="admin-menu">
+                <li class="active"><a href="#dashboard"><i class="fas fa-tachometer-alt"></i> Dashboard</a></li>
+                <li><a href="#projects"><i class="fas fa-images"></i> Projects</a></li>
+                <li><a href="#testimonials"><i class="fas fa-comments"></i> Testimonials</a></li>
+                <li><a href="#upload"><i class="fas fa-upload"></i> Upload Files</a></li>
+                <li><a href="#settings"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="../index.html"><i class="fas fa-eye"></i> View Website</a></li>
+                <li><a href="login.html" class="logout"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+            </ul>
+        </div>
+        
+        <!-- Admin Main Content -->
+        <div class="admin-main">
+            <!-- Dashboard Header -->
+            <div class="admin-header">
+                <h1>Portfolio Dashboard</h1>
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <h3 id="projectCount">0</h3>
+                        <p>Total Projects</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3 id="testimonialCount">0</h3>
+                        <p>Testimonials</p>
+                    </div>
+                    <div class="stat-card">
+                        <a href="#" id="downloadData" class="btn primary-btn">
+                            <i class="fas fa-download"></i> Export Data
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Dashboard Content -->
+            <div class="admin-content">
+                <!-- Add Project Form -->
+                <div class="admin-card" id="projects">
+                    <h2><i class="fas fa-plus-circle"></i> Add New Project</h2>
+                    <form id="addProjectForm" class="admin-form">
+                        <div class="form-group">
+                            <label for="projectTitle">Project Title *</label>
+                            <input type="text" id="projectTitle" placeholder="e.g., Brand Logo Design" required>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="projectType">Project Type *</label>
+                                <select id="projectType" required>
+                                    <option value="">Select Type</option>
+                                    <option value="Logo Design">Logo Design</option>
+                                    <option value="Social Media Design">Social Media Design</option>
+                                    <option value="Product Design">Product Design</option>
+                                    <option value="Motion Graphics">Motion Graphics</option>
+                                    <option value="Wedding Video">Wedding Video</option>
+                                    <option value="Corporate Video">Corporate Video</option>
+                                    <option value="YouTube Video">YouTube Video</option>
+                                    <option value="Documentary">Documentary</option>
+                                    <option value="Music Video">Music Video</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="projectCategory">Category *</label>
+                                <select id="projectCategory" required>
+                                    <option value="">Select Category</option>
+                                    <option value="graphics">Graphics Design</option>
+                                    <option value="video">Video Editing</option>
+                                    <option value="motion">Motion Graphics</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectImage">Image URL *</label>
+                            <div class="upload-area">
+                                <input type="text" id="projectImage" placeholder="https://example.com/image.jpg" required>
+                                <button type="button" class="btn secondary-btn" onclick="document.getElementById('imageUpload').click()">
+                                    <i class="fas fa-upload"></i> Upload
+                                </button>
+                                <input type="file" id="imageUpload" accept="image/*" style="display: none;" onchange="portfolioAdmin.uploadImage()">
+                            </div>
+                            <div id="imagePreview" class="image-preview"></div>
+                            <small>Upload your image first, then copy the URL here</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectLink">Project Link or Video URL</label>
+                            <input type="url" id="projectLink" placeholder="https://youtube.com/watch?v=... or website link">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="projectDescription">Description</label>
+                            <textarea id="projectDescription" rows="3" placeholder="Brief description of the project"></textarea>
+                        </div>
+                        
+                        <button type="button" id="submitProject" class="btn primary-btn" onclick="portfolioAdmin.addProject()">
+                            <i class="fas fa-plus"></i> Add Project
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Existing Projects -->
+                <div class="admin-card">
+                    <h2><i class="fas fa-images"></i> Existing Projects</h2>
+                    <div id="adminProjects" class="projects-list">
+                        <!-- Projects will be loaded here -->
+                        <p class="loading">Loading projects...</p>
+                    </div>
+                </div>
+                
+                <!-- Add Testimonial Form -->
+                <div class="admin-card" id="testimonials">
+                    <h2><i class="fas fa-comment-medical"></i> Add Testimonial</h2>
+                    <form id="addTestimonialForm" class="admin-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="clientName">Client Name *</label>
+                                <input type="text" id="clientName" placeholder="John Doe" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="clientRole">Client Role/Company *</label>
+                                <input type="text" id="clientRole" placeholder="CEO, Tech Company" required>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="testimonialText">Testimonial Text *</label>
+                            <textarea id="testimonialText" rows="4" placeholder="What the client said..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="clientRating">Rating (1-5)</label>
+                            <select id="clientRating">
+                                <option value="5">★★★★★ (5)</option>
+                                <option value="4">★★★★☆ (4)</option>
+                                <option value="3">★★★☆☆ (3)</option>
+                                <option value="2">★★☆☆☆ (2)</option>
+                                <option value="1">★☆☆☆☆ (1)</option>
+                            </select>
+                        </div>
+                        
+                        <button type="button" id="submitTestimonial" class="btn primary-btn" onclick="portfolioAdmin.addTestimonial()">
+                            <i class="fas fa-plus"></i> Add Testimonial
+                        </button>
+                    </form>
+                </div>
+                
+                <!-- Existing Testimonials -->
+                <div class="admin-card">
+                    <h2><i class="fas fa-comments"></i> Existing Testimonials</h2>
+                    <div id="adminTestimonials" class="testimonials-list">
+                        <!-- Testimonials will be loaded here -->
+                        <p class="loading">Loading testimonials...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="../admin.js"></script>
+    <script>
+        // Update counts on load
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                document.getElementById('projectCount').textContent = portfolioAdmin.projects.length;
+                document.getElementById('testimonialCount').textContent = portfolioAdmin.testimonials.length;
+            }, 500);
+        });
+    </script>
+</body>
+</html>
